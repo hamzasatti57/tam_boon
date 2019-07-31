@@ -9,7 +9,7 @@ class WebsiteController < ApplicationController
     charity = Charity.find_by_id(params[:charity]).lock(true)
 
     if params[:omise_token].present? || params[:amount].blank? || params[:amount].to_i <= 20 || charity.blank?
-      if Rails.env.test?
+      if Rails.env == "test"
         charge = OpenStruct.new({
           amount: (params[:amount].to_i * 100),
           paid: (params[:amount].to_i != 999),
@@ -38,7 +38,7 @@ class WebsiteController < ApplicationController
   private
 
   def retrieve_token(token)
-    if Rails.env.test?
+    if Rails.env == "test"
       OpenStruct.new({
         id: "tokn_X",
         card: OpenStruct.new({
